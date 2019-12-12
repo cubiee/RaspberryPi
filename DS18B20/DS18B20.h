@@ -2,9 +2,8 @@
 Header zum auslesen von ds18b20 temperatur sensoren
 benötigt: DS18B20.h DS18B20.c bool.h
 noch zu erledigen:
-1. funktion zum bus auslesen um unbekannte sensor id herauszufinden
-2. beim auslesen der temperaturwerde auf richtigkeit der werte prüfen
-3. debugmode erstellen
+1. beim auslesen der temperaturwerde auf richtigkeit der werte prüfen
+2. debugmode erstellen
 */
 
 #ifndef DS18B20_H
@@ -36,5 +35,7 @@ SENSOR NewSensor(void);
 int CheckSensor(SENSOR *s);
 
 int ReadTemp(SENSOR *s);
+
+void BusRead(void);
 
 #endif

@@ -148,3 +148,21 @@ int ReadTemp(SENSOR *s)
     }
   }
 }
+
+void BusRead(void)
+{
+  char buffer[BUFFERSIZE];
+  memset(buffer, '\0', BUFFERSIZE);
+  FILE *checkfile = fopen("/sys/bus/w1/devices/w1_bus_master1/w1_master_slaves","r");
+  if((NULL == checkfile)){
+    printf("Unable to open checkpath at: %s\n", "/sys/bus/w1/devices/w1_bus_master1/w1_master_slaves");
+  }
+  else
+  {
+    while(NULL != fgets(buffer, 2*DEVICE_LENGTH, checkfile))
+    {
+      printf(buffer);
+    }
+  }
+  return;
+}
