@@ -135,32 +135,47 @@ int ReadTemp(SENSOR *s)
     TRUE falls temperatur lesbar
     FALSE falls temperatur nicht lesbar
   */
+
+  //sensor überprüfen
   if(FALSE == CheckSensor(s))
   {
+    //Sensor check fehlgeschlagen
     printf("Sensor check fehlgeschlagen\n");
     return FALSE;
   }
   else
   {
+    //Sensor file öffnen
     FILE *device = fopen(s->devicepath, "r");
     if(NULL == device)
     {
-      printf("Fehler\n");
+      //fehler beim öffnen des sensor files
+      printf("Fehler beim öffnen des sensor files\n");
       return FALSE;
     }
     else
     {
+      //Buffer initialisieren und datei auslesen
       char buffer[BUFFERSIZE];
-      memset(buffer, '\0', BUFFERSIZE);
-      fgets(buffer,BUFFERSIZE,device);
-      memset(buffer, '\0', BUFFERSIZE);
-      fgets(buffer,BUFFERSIZE,device);
       char *temp;
+      memset(buffer, '\0', BUFFERSIZE);
+      fgets(buffer,BUFFERSIZE,device);
+      memset(buffer, '\0', BUFFERSIZE);
+      fgets(buffer,BUFFERSIZE,device);
+      //suchen nach t=123456
       temp = strchr(buffer,'t');
-      sscanf(temp,"t=%s",temp);
-      s->temp = atof(temp)/1000;
-      fclose(device);
-      return TRUE;
+      if(NULL == temp)
+      {
+        printf("Fehler beim auslesen der temperatur\n");
+        return FALSE;
+      }
+      else
+      {
+        sscanf(temp,"t=%s",temp);
+        s->temp = atof(temp)/1000;
+        fclose(device);
+        return TRUE;
+      }
     }
   }
 }
