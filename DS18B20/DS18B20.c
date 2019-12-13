@@ -23,6 +23,7 @@ SENSOR NewSensor(void)
   Rückgabewert(s):
     sensor struct mit defaultwerten
   */
+
   SENSOR s;
 
   //strings in struct mit '\0' initialisieren
@@ -48,6 +49,12 @@ SENSOR NewSensor(void)
   
   //temp auf 0 setzen
   s.temp = 0;
+
+  //mode auf normal setzen
+  s.mode = NORMALMODE;
+
+  //error auf NO_ERROR setzen
+  s.errornumber = SENSOR_NO_ERROR;
   return s;
 }
 
@@ -70,7 +77,11 @@ int CheckSensor(SENSOR *s)
   //checkfile öffnen, falls nicht möglich ausgabe und return false
   FILE *checkfile = fopen(s->checkpath,"r");
   if((NULL == checkfile)){
-    printf("Unable to open checkpath at: %s\n", s->checkpath);
+    if(s->mode)
+    {
+      printf("Unable to open checkpath at: %s\n", s->checkpath);
+    }
+    s->errornumber = SENSOR_CHECKPATH_FAIL;
     return FALSE;
   }
   else
@@ -93,26 +104,40 @@ int CheckSensor(SENSOR *s)
     //falls device nicht gefunden wurde ausgabe und return false
     if(ISFALSE(found))
     {
-      printf("Device %s not found\n", s->deviceID);
+      if(s->mode)
+      {
+        printf("Device %s not found\n", s->deviceID);
+      }
       fclose(checkfile);
-      return 0;
+      s->errornumber = SENSOR_NO_DEVICE;
+      return FALSE;
     }
     else
     {
       //sensor gefunden
-      printf("Device %s found\n", s->deviceID);
+      if(s->mode)
+      {
+        printf("Device %s found\n", s->deviceID);
+      }
       fclose(checkfile);
       FILE *devicefile = fopen(s->devicepath,"r");
       if(NULL == devicefile)
       {
         //sensor konnte nicht geöffnet werden
-        printf("Unable to open devicepath at: %s\n", s->devicepath);
-        return 0;
+        if(s->mode)
+        {
+          printf("Unable to open devicepath at: %s\n", s->devicepath);
+        }
+        s->errornumber = SENSOR_DEVICEPATH_FAIL;
+        return FALSE;
       }
       else
       {
         //sensor ready
-        printf("Device %s ready\n", s->deviceID);
+        if(s->mode)
+        {
+          printf("Device %s ready\n", s->deviceID);
+        }
         fclose(devicefile);
         return TRUE;
       }
@@ -140,7 +165,10 @@ int ReadTemp(SENSOR *s)
   if(FALSE == CheckSensor(s))
   {
     //Sensor check fehlgeschlagen
-    printf("Sensor check fehlgeschlagen\n");
+    if(s->mode)
+    {
+      printf("Sensor check fehlgeschlagen\n");
+    }
     return FALSE;
   }
   else
@@ -150,7 +178,10 @@ int ReadTemp(SENSOR *s)
     if(NULL == device)
     {
       //fehler beim öffnen des sensor files
-      printf("Fehler beim öffnen des sensor files\n");
+      if(s->mode)
+      {
+        printf("Fehler beim öffnen des sensor files\n");
+      }
       return FALSE;
     }
     else
@@ -166,7 +197,10 @@ int ReadTemp(SENSOR *s)
       temp = strchr(buffer,'t');
       if(NULL == temp)
       {
-        printf("Fehler beim auslesen der temperatur\n");
+        if(s->mode)
+        {
+          printf("Fehler beim auslesen der temperatur\n");
+        }
         return FALSE;
       }
       else
@@ -207,4 +241,31 @@ void BusRead(void)
     }
   }
   return;
+}
+
+void PrintSensorError(SENSOR *s)
+{
+  int Error = s->errornumber;
+  switch (Error)
+  {
+  case SENSOR_NO_ERROR:
+    printf("Kein Error gefunden\n");
+    break;
+  
+  case SENSOR_CHECKPATH_FAIL:
+    printf("Checkpath konnte nicht geoeffnet werden\n");
+    break;
+
+  case SENSOR_NO_DEVICE:
+    printf("Sensor konnte nicht gefunden werden\n");
+    break;
+
+  case SENSOR_DEVICEPATH_FAIL:
+    printf("Devicepath konnte nicht geoeffnet werden\n");
+    break;
+
+  default:
+    printf("WUBWUB\n");
+    break;
+  }
 }
