@@ -64,7 +64,7 @@ int CheckSensor(SENSOR *s)
     SENSOR s, muss mit defaultwerten initialisiert sein oder mit eigenen werten gefüllt sein
   Rückgabewert(check):
     TRUE falls sensor vorhanden und lesbar ist
-    False falls sensor nicht vorhanden oder nicht lesbar ist
+    FALSE falls sensor nicht vorhanden oder nicht lesbar ist
   */
 
   //checkfile öffnen, falls nicht möglich ausgabe und return false
@@ -99,16 +99,19 @@ int CheckSensor(SENSOR *s)
     }
     else
     {
+      //sensor gefunden
       printf("Device %s found\n", s->deviceID);
       fclose(checkfile);
       FILE *devicefile = fopen(s->devicepath,"r");
       if(NULL == devicefile)
       {
+        //sensor konnte nicht geöffnet werden
         printf("Unable to open devicepath at: %s\n", s->devicepath);
         return 0;
       }
       else
       {
+        //sensor ready
         printf("Device %s ready\n", s->deviceID);
         fclose(devicefile);
         return TRUE;
@@ -119,46 +122,85 @@ int CheckSensor(SENSOR *s)
 
 int ReadTemp(SENSOR *s)
 {
+  /*
+  Funktion:
+    int ReadTemp(SENSOR *s);
+  Beschreibung:
+    Funktion zum einlesen der temperatur wird danach im struct abgespeichert
+  Aufruf:
+    check = ReadTemp(s);
+  Übergabewert(s):
+    SENSOR s, muss mit defaultwerten initialisiert sein oder mit eigenen werten gefüllt sein
+  Rückgabewert(check):
+    TRUE falls temperatur lesbar
+    FALSE falls temperatur nicht lesbar
+  */
+
+  //sensor überprüfen
   if(FALSE == CheckSensor(s))
   {
-    printf("test");
+    //Sensor check fehlgeschlagen
+    printf("Sensor check fehlgeschlagen\n");
     return FALSE;
   }
   else
   {
+    //Sensor file öffnen
     FILE *device = fopen(s->devicepath, "r");
     if(NULL == device)
     {
-      printf("Fehler\n");
+      //fehler beim öffnen des sensor files
+      printf("Fehler beim öffnen des sensor files\n");
       return FALSE;
     }
     else
     {
+      //Buffer initialisieren und datei auslesen
       char buffer[BUFFERSIZE];
-      memset(buffer, '\0', BUFFERSIZE);
-      fgets(buffer,BUFFERSIZE,device);
-      memset(buffer, '\0', BUFFERSIZE);
-      fgets(buffer,BUFFERSIZE,device);
       char *temp;
+      memset(buffer, '\0', BUFFERSIZE);
+      fgets(buffer,BUFFERSIZE,device);
+      memset(buffer, '\0', BUFFERSIZE);
+      fgets(buffer,BUFFERSIZE,device);
+      //suchen nach t=123456
       temp = strchr(buffer,'t');
-      sscanf(temp,"t=%s",temp);
-      s->temp = atof(temp)/1000;
-      fclose(device);
-      return TRUE;
+      if(NULL == temp)
+      {
+        printf("Fehler beim auslesen der temperatur\n");
+        return FALSE;
+      }
+      else
+      {
+        sscanf(temp,"t=%s",temp);
+        s->temp = atof(temp)/1000;
+        fclose(device);
+        return TRUE;
+      }
     }
   }
 }
 
 void BusRead(void)
 {
+  /*
+  Funktion:
+    void BusRead(void);
+  Beschreibung:
+    Funktion überprüft den one wire bus des raspberry pi aus und gibt alle angeschlossenen devices aus
+  Aufruf:
+    BusRead();
+  */
+  //buffer initialisieren
   char buffer[BUFFERSIZE];
   memset(buffer, '\0', BUFFERSIZE);
+  //checkfile öffnen
   FILE *checkfile = fopen("/sys/bus/w1/devices/w1_bus_master1/w1_master_slaves","r");
   if((NULL == checkfile)){
     printf("Unable to open checkpath at: %s\n", "/sys/bus/w1/devices/w1_bus_master1/w1_master_slaves");
   }
   else
   {
+    //solange devices ausgeben bis dateiende erreicht ist
     while(NULL != fgets(buffer, 2*DEVICE_LENGTH, checkfile))
     {
       printf(buffer);
