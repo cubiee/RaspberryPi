@@ -2,8 +2,8 @@
 #include "DS18B20.h"
 
 int main(void){ 
-  SENSOR sensor1 = NewSensor();
-  SENSOR sensor2 = NewSensor();
+  DS18B20 sensor1 = NewSensor();
+  DS18B20 sensor2 = NewSensor();
   int check1 = ReadTemp(&sensor1);
   int check2 = ReadTemp(&sensor2);
   
