@@ -5,7 +5,6 @@
 #include "bool.h"
 #include "DS18B20.h"
 
-
 char w1_path[PATH_LENGTH] = "/sys/bus/w1/devices/w1_bus_master1/";
 char w1_slaves[SLAVE_LENGTH] = "w1_master_slaves";
 char device[DEVICE_LENGTH] = "28-0316451002ff";
