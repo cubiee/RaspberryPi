@@ -11,20 +11,20 @@ char w1_slaves[SLAVE_LENGTH] = "w1_master_slaves";
 char device[DEVICE_LENGTH] = "28-0316451002ff";
 char zusatz[ADD_LENGTH] = "/w1_slave";
 
-SENSOR NewSensor(void)
+DS18B20 NewSensor(void)
 {
   /*
   Funktion:
-    SENSOR NewSensor(void);
+    DS18B20 NewSensor(void);
   Beschreibung:
-    Konstruktor funktion für SENSOR structs
+    Konstruktor funktion für DS18B20 structs
   Aufruf:
     s = NewSensor();
   Rückgabewert(s):
-    sensor struct mit defaultwerten
+    DS18B20 struct mit defaultwerten
   */
 
-  SENSOR s;
+  DS18B20 s;
 
   //strings in struct mit '\0' initialisieren
   memset(s.deviceID, '\0', DEVICE_LENGTH);
@@ -58,17 +58,17 @@ SENSOR NewSensor(void)
   return s;
 }
 
-int CheckSensor(SENSOR *s)
+int CheckSensor(DS18B20 *s)
 {
   /*
   Funktion:
-    int CheckSensor(SENSOR *s);
+    int CheckSensor(DS18B20 *s);
   Beschreibung:
     Funktion zum überprüfen ob sensor verfügbar und lesbar ist
   Aufruf:
     check = CheckSensor(s);
   Übergabewert(s):
-    SENSOR s, muss mit defaultwerten initialisiert sein oder mit eigenen werten gefüllt sein
+    DS18B20 s, muss mit defaultwerten initialisiert sein oder mit eigenen werten gefüllt sein
   Rückgabewert(check):
     TRUE falls sensor vorhanden und lesbar ist
     FALSE falls sensor nicht vorhanden oder nicht lesbar ist
@@ -145,17 +145,17 @@ int CheckSensor(SENSOR *s)
   }
 }
 
-int ReadTemp(SENSOR *s)
+int ReadTemp(DS18B20 *s)
 {
   /*
   Funktion:
-    int ReadTemp(SENSOR *s);
+    int ReadTemp(DS18B20 *s);
   Beschreibung:
     Funktion zum einlesen der temperatur wird danach im struct abgespeichert
   Aufruf:
     check = ReadTemp(s);
   Übergabewert(s):
-    SENSOR s, muss mit defaultwerten initialisiert sein oder mit eigenen werten gefüllt sein
+    DS18B20 s, muss mit defaultwerten initialisiert sein oder mit eigenen werten gefüllt sein
   Rückgabewert(check):
     TRUE falls temperatur lesbar
     FALSE falls temperatur nicht lesbar
@@ -243,7 +243,7 @@ void BusRead(void)
   return;
 }
 
-void PrintSensorError(SENSOR *s)
+void PrintSensorError(DS18B20 *s)
 {
   int Error = s->errornumber;
   switch (Error)
