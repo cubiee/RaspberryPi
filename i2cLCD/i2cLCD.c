@@ -22,6 +22,7 @@ I2CLCD LCDInit(int id, int rows, int cols)
   lcd_write_cmd(&disp, LCD_CLEARDISPLAY);
   lcd_write_cmd(&disp, LCD_ENTRYMODESET | LCD_ENTRYLEFT);
   sleep(0.2);
+  return disp;
 }
 
 //Low level functions
