@@ -76,7 +76,7 @@ typedef struct i2clcd_s
   int handle;
 } I2CLCD;
 
-I2CLCD i2cInit(int id, int rows, int cols);
+I2CLCD i2cLCDInit(int id, int rows, int cols);
 
 //Low level functions
 //Write a single i2c command (low level function)
