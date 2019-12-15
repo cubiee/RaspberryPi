@@ -1,40 +1,10 @@
 #include <stdio.h>
-#include "DS18B20.h"
+#include "i2cLCD.h"
+
 
 int main(void){ 
-      
-  DS18B20 sensor1 = NewSensor("28-0316451002ff");
-  DS18B20 sensor2 = NewSensor("28-0316475929ff");
-  DS18B20 sensor3 = NewSensor("28-041652badcff");
-
-  int check1 = ReadTemp(&sensor1);
-  if(check1)
-  {
-    printf("Sensor 1 Temperatur = %.3f\n", sensor1.temp);
-  }
-  else
-  {
-    PrintSensorError(&sensor1);
-  }
-
-  int check2 = ReadTemp(&sensor2);
-  if(check2)
-  {
-    printf("Sensor 2 Temperatur = %.3f\n", sensor2.temp);
-  }
-  else
-  {
-    PrintSensorError(&sensor2);
-  }
-
-  int check3 = ReadTemp(&sensor3);
-  if(check3)
-  {
-    printf("Sensor 3 Temperatur = %.3f\n", sensor3.temp);
-  }
-  else
-  {
-    PrintSensorError(&sensor3);
-  }
+  I2CLCD display = i2cLCDInit(0x27,4,16);
+  clear(&display);
+  display_string("hallo", 1, 4);
   return 0;
 }
