@@ -8,9 +8,6 @@ int main(void){
   DS18B20 sensor3 = NewSensor("28-041652badcff");
 
   int check1 = ReadTemp(&sensor1);
-  int check2 = ReadTemp(&sensor2);
-  int check3 = ReadTemp(&sensor3);
-
   if(check1)
   {
     printf("Sensor 1 Temperatur = %.3f\n", sensor1.temp);
@@ -20,25 +17,24 @@ int main(void){
     PrintSensorError(&sensor1);
   }
 
+  int check2 = ReadTemp(&sensor2);
   if(check2)
   {
     printf("Sensor 2 Temperatur = %.3f\n", sensor2.temp);
-    fflush(stdout);
   }
   else
   {
     PrintSensorError(&sensor2);
   }
 
+  int check3 = ReadTemp(&sensor3);
   if(check3)
   {
     printf("Sensor 3 Temperatur = %.3f\n", sensor3.temp);
-    fflush(stdout);
   }
   else
   {
     PrintSensorError(&sensor3);
-    fflush(stdout);
   }
   return 0;
 }
