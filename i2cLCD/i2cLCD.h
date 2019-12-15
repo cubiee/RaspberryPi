@@ -162,4 +162,5 @@ int get_row_pos(I2CLCD *disp);
        
 //Get cursor column position
 int get_col_pos(I2CLCD *disp);
+
 #endif
