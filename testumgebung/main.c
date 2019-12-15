@@ -2,14 +2,18 @@
 #include "DS18B20.h"
 
 int main(void){ 
-  DS18B20 sensor1 = NewSensor();
-  DS18B20 sensor2 = NewSensor();
+      
+  DS18B20 sensor1 = NewSensor("28-0316451002ff");
+  DS18B20 sensor2 = NewSensor("28-0316475929ff");
+  DS18B20 sensor3 = NewSensor("28-041652badcff");
+
   int check1 = ReadTemp(&sensor1);
   int check2 = ReadTemp(&sensor2);
-  
+  int check3 = ReadTemp(&sensor3);
+
   if(check1)
   {
-    printf("Temperatur = %.3f\n", sensor1.temp);
+    printf("Sensor 1 Temperatur = %.3f\n", sensor1.temp);
   }
   else
   {
@@ -18,11 +22,20 @@ int main(void){
 
   if(check2)
   {
-    printf("Temperatur = %.3f\n", sensor2.temp);
+    printf("Sensor 2 Temperatur = %.3f\n", sensor2.temp);
   }
   else
   {
     PrintSensorError(&sensor2);
+  }
+
+  if(check3)
+  {
+    printf("Sensor 3 Temperatur = %.3f\n", sensor3.temp);
+  }
+  else
+  {
+    PrintSensorError(&sensor3);
   }
   return 0;
 }

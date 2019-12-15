@@ -3,8 +3,6 @@ Header zum auslesen von ds18b20 temperatur sensoren
 benötigt: DS18B20.h DS18B20.c bool.h
 noch zu erledigen:
 1. beim auslesen der temperaturwerde auf richtigkeit der werte prüfen
-2. SENSOR in DS18B20 umbennen
-3. newsensor id übergabe
 */
 
 #ifndef DS18B20_H
@@ -43,7 +41,7 @@ typedef struct ds18b20_s
   int errornumber;
 } DS18B20;
 
-DS18B20 NewSensor(void);
+DS18B20 NewSensor(char *id);
 
 int CheckSensor(DS18B20 *s);
 
