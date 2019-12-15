@@ -2,7 +2,7 @@
 #include <pigpio.h>
 #include "i2cLCD.h"
 
-I2CLCD i2cInit(int id, int rows, int cols)
+I2CLCD i2cLCDInit(int id, int rows, int cols)
 {
   gpioInitialise();
   I2CLCD disp;
