@@ -10,29 +10,29 @@ char w1_slaves[SLAVE_LENGTH] = "w1_master_slaves";
 char device[DEVICE_LENGTH] = "28-0316451002ff";
 char zusatz[ADD_LENGTH] = "/w1_slave";
 
-DS18B20 NewSensor(void)
+DS18B20 NewSensor(char *id)
 {
   /*
   Funktion:
-    DS18B20 NewSensor(void);
+    DS18B20 NewSensor(char *id);
   Beschreibung:
     Konstruktor funktion für DS18B20 structs
   Aufruf:
     s = NewSensor();
+  Übergabewert(id):
+    sensor id des zu öffnenden sensors
+    falls NULL wird die hardcoded id benutzt
   Rückgabewert(s):
     DS18B20 struct mit defaultwerten
   */
 
   DS18B20 s;
-
+  
   //strings in struct mit '\0' initialisieren
   memset(s.deviceID, '\0', DEVICE_LENGTH);
   memset(s.directory, '\0', PATH_LENGTH);
   memset(s.devicepath, '\0', MAX_DEVICE_PATH_SIZE);
   memset(s.checkpath, '\0', MAX_CHECK_PATH_SIZE);
-  
-  //Standard deviceID -> struct
-  strcpy(s.deviceID, device);
 
   //Standard directory -> struct
   strcpy(s.directory, w1_path);
@@ -40,12 +40,28 @@ DS18B20 NewSensor(void)
   //Checkpath generieren -> struct
   strcpy(s.checkpath, w1_path);
   strcat(s.checkpath, w1_slaves);
-  
-  //Devicepath generieren -> struct
-  strcpy(s.devicepath, w1_path);
-  strcat(s.devicepath, device);
-  strcat(s.devicepath, zusatz);
-  
+
+  if(NULL == id)
+  {
+    //Standard deviceID -> struct
+    strcpy(s.deviceID, device);
+
+    //Devicepath generieren -> struct
+    strcpy(s.devicepath, w1_path);
+    strcat(s.devicepath, device);
+    strcat(s.devicepath, zusatz);
+  }
+  else
+  {
+    //Standard deviceID -> struct
+    strcpy(s.deviceID, id);
+
+    //Devicepath generieren -> struct
+    strcpy(s.devicepath, w1_path);
+    strcat(s.devicepath, id);
+    strcat(s.devicepath, zusatz);
+  }
+
   //temp auf 0 setzen
   s.temp = 0;
 
