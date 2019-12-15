@@ -43,7 +43,7 @@ DS18B20 NewSensor(char *id)
 
   if(NULL == id)
   {
-    //Standard deviceID -> struct
+    //hardcoded deviceID -> struct
     strcpy(s.deviceID, device);
 
     //Devicepath generieren -> struct
@@ -53,7 +53,7 @@ DS18B20 NewSensor(char *id)
   }
   else
   {
-    //Standard deviceID -> struct
+    //deviceID -> struct
     strcpy(s.deviceID, id);
 
     //Devicepath generieren -> struct
