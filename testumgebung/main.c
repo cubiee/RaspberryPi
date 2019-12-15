@@ -23,6 +23,7 @@ int main(void){
   if(check2)
   {
     printf("Sensor 2 Temperatur = %.3f\n", sensor2.temp);
+    fflush(stdout);
   }
   else
   {
@@ -32,10 +33,12 @@ int main(void){
   if(check3)
   {
     printf("Sensor 3 Temperatur = %.3f\n", sensor3.temp);
+    fflush(stdout);
   }
   else
   {
     PrintSensorError(&sensor3);
+    fflush(stdout);
   }
   return 0;
 }
